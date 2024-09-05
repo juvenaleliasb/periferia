@@ -30,9 +30,6 @@ class SecuenciaDnaApplicationTests {
 	@Autowired
 	MockMvc mvc;
 
-	@MockBean
-	private SecuenciaService secuenciaService;
-
 	@Test
 	void contextLoads() {
 	}
@@ -94,7 +91,7 @@ class SecuenciaDnaApplicationTests {
 			}
 		};
 
-		when(secuenciaService.getAdnStats()).thenReturn(Optional.ofNullable(mockDnaStats));
+		//when(secuenciaService.getAdnStats()).thenReturn(Optional.ofNullable(mockDnaStats));
 
 		mvc.perform(get("/mutants/stats")
 						.contentType(MediaType.APPLICATION_JSON)

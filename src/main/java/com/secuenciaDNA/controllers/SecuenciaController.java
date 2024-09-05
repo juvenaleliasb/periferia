@@ -18,7 +18,7 @@ public class SecuenciaController {
     private final SecuenciaService secuenciaService;
 
     @PostMapping("/mutant")
-    public ResponseEntity<?> checkMutants(@Validated @RequestBody final DnaDTO dnaDTO){
+    public ResponseEntity<?> checkMutants(@RequestBody final DnaDTO dnaDTO){
         if (secuenciaService.saveDNA(dnaDTO)) {
             return ResponseEntity.ok(Boolean.TRUE);
         }
