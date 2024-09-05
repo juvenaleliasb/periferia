@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/mutants")//
+@RequestMapping()//"/mutants"
 public class SecuenciaController {
 
     private final SecuenciaService secuenciaService;
 
-    @PostMapping("/mutant")
+    @PostMapping("/mutants/mutant")
     public ResponseEntity<?> checkMutants(@RequestBody final DnaDTO dnaDTO){
         if (secuenciaService.saveDNA(dnaDTO)) {
             return ResponseEntity.ok(Boolean.TRUE);
@@ -25,7 +25,7 @@ public class SecuenciaController {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
-    @GetMapping("/stats")
+    @GetMapping("/mutants/stats")
     public ResponseEntity<?> getDnaStats(){
         return ResponseEntity.ok(secuenciaService.getAdnStats());
     }
