@@ -9,10 +9,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.Optional;
 
 
@@ -29,6 +31,9 @@ class SecuenciaDnaApplicationTests {
 
 	@Autowired
 	MockMvc mvc;
+
+	@Autowired
+	private WebTestClient webTestClient;
 
 	@Test
 	void contextLoads() {
@@ -91,16 +96,31 @@ class SecuenciaDnaApplicationTests {
 			}
 		};
 
-		//when(secuenciaService.getAdnStats()).thenReturn(Optional.ofNullable(mockDnaStats));
-
 		mvc.perform(get("/mutants/stats")
 						.contentType(MediaType.APPLICATION_JSON)
 				)
 				.andExpect(status().isOk())
-				//.andExpect(jsonPath("$.someField").value(mockDnaStats))
 				.andReturn()
 				.getResponse().getContentType();
 
+	}
+
+	@Test
+	void dnaRTest() throws Exception {
+
+		ClassLoader classLoader = getClass().getClassLoader();
+		Path jsonFilePath = Path.of(Objects.requireNonNull(classLoader.getResource("dna_test.json")).toURI());
+		String jsonContent = Files.readString(jsonFilePath, StandardCharsets.UTF_8);
+
+		webTestClient.post()
+				.uri("/mutants/mutant")
+				.contentType(MediaType.APPLICATION_JSON)
+				.bodyValue(jsonContent)
+				.exchange()
+				.expectStatus().isOk()
+				.expectHeader().contentType(MediaType.APPLICATION_JSON)
+				.expectBody(String.class)
+				.isEqualTo("true");
 	}
 
 }

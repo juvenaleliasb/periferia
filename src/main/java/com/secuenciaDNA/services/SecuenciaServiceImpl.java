@@ -16,22 +16,28 @@ public class SecuenciaServiceImpl implements SecuenciaService{
 
     private final AdnRepository adnRepository;
 
-    public boolean checkMutants(DnaDTO dna) {
-        return hasFourConsecutive(dna.getDna());
-    }
-
     @Override
     public boolean saveDNA(DnaDTO dna) {
-    //public Mono<Boolean> saveDNA(DnaDTO dna) {
-        boolean isMutant = checkMutants(dna); //hasFourConsecutive(dna);
+        boolean isMutant = checkMutants(dna.getDna());
         Adn adn = Adn.builder()
                 .mutant(isMutant)
                 .dna(String.join(",", dna.getDna()))
                 .build();
         adnRepository.save(adn);
 
-        //return Mono.just(isMutant);
         return isMutant;
+    }
+
+    @Override
+    public Mono<Boolean> saveDNAReact(DnaDTO dna) {
+        boolean isMutant = checkMutants(dna.getDna());
+        Adn adn = Adn.builder()
+                .mutant(isMutant)
+                .dna(String.join(",", dna.getDna()))
+                .build();
+            adnRepository.save(adn);
+
+        return Mono.just(isMutant);
     }
 
     @Override
@@ -39,7 +45,7 @@ public class SecuenciaServiceImpl implements SecuenciaService{
         return adnRepository.getAdnStats();
     }
 
-    public static boolean hasFourConsecutive(String[] dna) {
+    public static boolean checkMutants(String[] dna) {
         int n = dna.length;
         char[][] matrix = new char[n][n];
 

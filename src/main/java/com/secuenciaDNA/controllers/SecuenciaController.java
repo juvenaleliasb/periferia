@@ -37,8 +37,10 @@ public class SecuenciaController {
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
-    /*public Mono<ResponseEntity<?>> checkMutants(@RequestBody final DnaDTO dnaDTO) {
-        return secuenciaService.saveDNA(dnaDTO)
+
+    @PostMapping("/mutantReact")
+    public Mono<ResponseEntity<?>> checkMutantsReact(@RequestBody final DnaDTO dnaDTO) {
+        return secuenciaService.saveDNAReact(dnaDTO)
                 .map(saved -> {
                     if (saved) {
                         return ResponseEntity.ok(Boolean.TRUE);
@@ -46,7 +48,7 @@ public class SecuenciaController {
                         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
                     }
                 });
-    }*/
+    }
 
     @Operation(summary = "Datos estadísticos", description = "Población analizada", tags = { "store" })
     @ApiResponses(value = {
