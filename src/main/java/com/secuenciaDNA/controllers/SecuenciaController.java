@@ -29,7 +29,6 @@ public class SecuenciaController {
             @ApiResponse(responseCode = "200", description = "Mutante", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Long.class)))),
             @ApiResponse(responseCode = "403", description = "No Mutante", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Long.class))))
     })
-
     @PostMapping("/mutant")
     public ResponseEntity<?> checkMutants(@RequestBody final DnaDTO dnaDTO){
         if (secuenciaService.saveDNA(dnaDTO)) {
@@ -38,6 +37,11 @@ public class SecuenciaController {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
+    @Operation(summary = "Almacenamiento de ADN analizado",description = "This service add a new DNA")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Mutante", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Long.class)))),
+            @ApiResponse(responseCode = "403", description = "No Mutante", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Long.class))))
+    })
     @PostMapping("/mutantReact")
     public Mono<ResponseEntity<?>> checkMutantsReact(@RequestBody final DnaDTO dnaDTO) {
         return secuenciaService.saveDNAReact(dnaDTO)
