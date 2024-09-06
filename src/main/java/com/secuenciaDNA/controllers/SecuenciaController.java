@@ -19,15 +19,18 @@ import reactor.core.publisher.Mono;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping()
+@RequestMapping("/mutants")
 public class SecuenciaController {
 
     private final SecuenciaService secuenciaService;
 
     @Operation(summary = "Almacenamiento de ADN analizado",description = "This service add a new DNA")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "200 response", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Long.class))))})
-    @PostMapping("/mutants/mutant")
+            @ApiResponse(responseCode = "200", description = "Mutante", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Long.class)))),
+            @ApiResponse(responseCode = "403", description = "No Mutante", content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = Long.class))))
+    })
+
+    @PostMapping("/mutant")
     public ResponseEntity<?> checkMutants(@RequestBody final DnaDTO dnaDTO){
         if (secuenciaService.saveDNA(dnaDTO)) {
             return ResponseEntity.ok(Boolean.TRUE);
@@ -50,7 +53,7 @@ public class SecuenciaController {
             @ApiResponse(responseCode = "200", description = "successful operation", content = @Content(schema = @Schema(implementation = Adn.class))),
             @ApiResponse(responseCode = "405", description = "Invalid input", content = @Content)
     })
-    @GetMapping("/mutants/stats")
+    @GetMapping("/stats")
     public ResponseEntity<?> getDnaStats(){
         return ResponseEntity.ok(secuenciaService.getAdnStats());
     }
