@@ -6,6 +6,7 @@ import com.secuenciaDNA.models.Stats;
 import com.secuenciaDNA.repositories.AdnRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import java.util.Optional;
 
@@ -15,20 +16,21 @@ public class SecuenciaServiceImpl implements SecuenciaService{
 
     private final AdnRepository adnRepository;
 
-
     public boolean checkMutants(DnaDTO dna) {
         return hasFourConsecutive(dna.getDna());
     }
 
     @Override
     public boolean saveDNA(DnaDTO dna) {
-        boolean isMutant = checkMutants(dna);
+    //public Mono<Boolean> saveDNA(DnaDTO dna) {
+        boolean isMutant = checkMutants(dna); //hasFourConsecutive(dna);
         Adn adn = Adn.builder()
                 .mutant(isMutant)
                 .dna(String.join(",", dna.getDna()))
                 .build();
         adnRepository.save(adn);
 
+        //return Mono.just(isMutant);
         return isMutant;
     }
 
